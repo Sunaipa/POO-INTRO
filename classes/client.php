@@ -21,7 +21,9 @@ class client {
     public function getChiffreAffaire(){
         $total = 0;
         foreach($this->factures as $facture) {
-        $total += $facture->getMontant();
+            if ($facture->getStatut() === Facture::STATUT_PAYEE) {
+                $total += $facture->getMontant();
+            }
         }
         return $total;
     }
@@ -31,16 +33,16 @@ class client {
     /**
      * Get the value of factureList
      */ 
-    public function getFactureList()
+    public function getFactures()
     {
-        return $this->factureList;
+        return $this->factures;
     }
     /**
      * Set the value of factureList
      *
      * @return  self
      */ 
-    public function setFactureList($factureList)
+    public function setFactures($factureList)
     {
         $this->factureList = $factureList;
 

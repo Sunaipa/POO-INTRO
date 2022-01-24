@@ -1,11 +1,16 @@
 <?php
 class Facture
 {
+    const STATUT_EN_COURS = 1;
+    const STATUT_PAYEE = 2;
+    const STATUT_ANNULLE = 3;
+
     public static $tva = .20;
     private int $numFacture;
     private int $montant;
     private DateTime $date;
     private Client $client;
+    private int $statut = 0;
 
     public function __construct(int $numFacture, int $montant, Datetime $date, Client $client)
     {
@@ -86,6 +91,25 @@ class Facture
      */ 
     public function setClient($client){
         $this->client = $client;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of statut
+     */ 
+    public function getStatut()
+    {
+        return $this->statut;
+    }
+    /**
+     * Set the value of statut
+     *
+     * @return  self
+     */ 
+    public function setStatut($statut)
+    {
+        $this->statut = $statut;
 
         return $this;
     }
