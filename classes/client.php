@@ -18,13 +18,10 @@ class client {
         return $this;
     }
 
-    public function getMontantTotalFactures(){
+    public function getChiffreAffaire(){
         $total = 0;
-        if (!empty($this->factures)) {
-            foreach($this->factures as $facture) {
-            $total += $facture->getMontant();
-            } 
-            return $total;
+        foreach($this->factures as $facture) {
+        $total += $facture->getMontant();
         }
         return $total;
     }
