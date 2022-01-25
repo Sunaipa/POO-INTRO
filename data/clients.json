@@ -1,0 +1,11 @@
+[
+    {
+        "numClient": 1, "nom": "Client A"
+    },
+    {
+        "numClient": 2, "nom": "Client B"
+    },
+    {
+        "numClient": 3, "nom": "Client C"
+    }
+]

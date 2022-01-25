@@ -2,11 +2,13 @@
 
 
 class client {
+    //ATTRIBUTS
     private int $numClient;
     private string $nom;
     private array $factures = [];
 
 
+    //FONCTIONS
     public function __construct(int $numClient, string $nom){
         $this->numClient = $numClient;
         $this->nom = $nom;
@@ -27,7 +29,6 @@ class client {
         }
         return $total;
     }
-
 
     //GETTERS & SETTERS
     /**
