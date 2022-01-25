@@ -22,12 +22,6 @@ class Form {
         return "<button type=\"submit\">Valider</button></form>";
     }
     public function addField(InputFieldInterface $field) {
-        // $html ="<div>
-        //     <label for=" . $inputField->getName() . ">" . $inputField->getName() . "</label>
-        //     <input type=" . $inputField->getType() . "name=" . $inputField->getName() . "></input>
-        // </div>";
-        // array_push($this->fields, $html);
-
         $this->fields[$field->getName()] = $field;
         return $this;
     }
@@ -69,26 +63,14 @@ class Form {
         }
     }  
 
+    public function hydrateFromObject($entity) {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // public function getFields() {
-    //     $html ="";
-    //     foreach ($this->fields as $f) {
-    //         $html .= $f;
-    //     }
-    //     return $html;
-    // }
+        foreach ($this->fields as $key => $field) {
+            $methodName = "get". ucfirst($key);
+            if (method_exists($entity, $methodName)) {
+                $field->setValue($entity->$methodName());
+            }
+        }
+ }
 }
 
