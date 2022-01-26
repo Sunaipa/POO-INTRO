@@ -2,14 +2,21 @@
 
 class PersonDAO {
     private PDO $pdo;
+    private PDOStatement $statement;
 
     public function __construct(PDO $pdo) {
         $this->pdo = $pdo;
     }
 
-    public function findAll(array $orderBy = [], array $limit = []) {
+    public function findAll(array $orderBy = [], array $limit = []):self {
         $sql = "SELECT * FROM persons ";
         if(! empty($orderBy)) {
+            $sql .= "ORDER BY ";
+            $orderCols = [];
+            foreach($orderBy as $colName => $order){
+                $orderCols[] = "$colName $order ";
+            }
+            $sql .= implode(", ", $orderCols);            
             //Autre option qui fonctionne
             // $sql .= "ORDER BY ";
             // foreach($orderBy as $colName => $order) {
@@ -22,12 +29,6 @@ class PersonDAO {
             // $sql .= $orderBy[$key] . " ";
             // var_dump($sql);
             //
-            $sql .= "ORDER BY ";
-            $orderCols = [];
-            foreach($orderBy as $colName => $order){
-                $orderCols[] = "$colName $order ";
-            }
-            $sql .= implode(", ", $orderCols);            
         }
         if(! empty($limit)) {
             $limit = array_map(function ($item){return (int)$item;}, $limit );
@@ -37,9 +38,22 @@ class PersonDAO {
                 $sql .= ", " . $limit["offset"] . " ";
             }
         }
-        $statement = $this->pdo->prepare($sql);
-        $statement->execute();
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
+        $this->statement = $this->pdo->prepare($sql);
+        $this->statement->execute();
+        return $this;
+    }
+
+    public function getAllAsArray() {
+        return $this->statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getAllAsObject():array {
+        $data = $this->getAllAsArray();
+        $objectList = [];
+        foreach ($data as $row) {
+            $objectList[] = $this->hydrate($row);
+        }
+        return $objectList;
     }
 
     public function snakeToCamelCase(string $name) {
@@ -48,4 +62,19 @@ class PersonDAO {
         $nameParts = array_map(function ($item){return ucfirst($item);}, $nameParts);
         return $camel . implode("", $nameParts);
     }
+
+    public function hydrate(array $data) {
+        $person = new Person();
+        foreach ($data as $key => $value) {
+            $methodName = "set" . $this->snakeToCamelCase($key);
+            if (method_exists($person, $methodName)) {
+                $person->$methodName($value);
+            }
+        }
+        return $person;
+    }
+
+
+
 }
+
