@@ -4,6 +4,7 @@ class Person {
 
     private string $lastName;
     private string $firstName;
+    private int $id;
 
 
 
@@ -49,6 +50,26 @@ class Person {
     public function setLastName($lastName)
     {
         $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of id
+     */ 
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the value of id
+     *
+     * @return  self
+     */ 
+    public function setId($id)
+    {
+        $this->id = $id;
 
         return $this;
     }
